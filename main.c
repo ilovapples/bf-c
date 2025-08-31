@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 #include "aplcore/types.h"
-#include "aplcore/util/misc.h"
 #include "aplcore/util/log.h"
 
 #include "util.h"
