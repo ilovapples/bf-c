@@ -2,4 +2,4 @@ compile_commands.json
 .cache/
 
 bf
-*.o
+obj/*.o

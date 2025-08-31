@@ -1,19 +1,30 @@
-BINC := $(HOME)/Coding/include
-BLIB := $(HOME)/Coding/lib
+OBJ := obj
+INCL := include
+SRC := src
 
-OBJECTS := main.o util.o
-APLCORE_LDFLAGS := -L$(BLIB) -laplcore
+SOURCES := $(filter-out $(SRC)/%_incl.c, $(wildcard $(SRC)/*.c))
+OBJECTS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
 
 EXEC := bf
 
-$(EXEC): $(OBJECTS) $(BLIB)/libaplcore.a
-	gcc $(OBJECTS) $(APLCORE_LDFLAGS) -o $(EXEC)
+CC := gcc
+CFLAGS := -std=c99 -Wall -Wextra -Wpedantic
 
-main.o: main.c util.h $(BINC)/aplcore/types.h
-	gcc main.c -I$(BINC) -I$(BINC)/aplcore -c -o main.o
+all: $(OBJ) $(EXEC)
 
-util.o: util.c util.h $(BINC)/aplcore/types.h
-	gcc util.c -I$(BINC) -I$(BINC)/aplcore -c -o util.o
+.PHONY: clean
+
+$(EXEC): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(EXEC)
+
+$(OBJ)/main.o: $(SRC)/main.c $(INCL)/util.h
+	$(CC) $(SRC)/main.c -I$(INCL) -c -o $(OBJ)/main.o
+
+$(OBJ)/util.o: $(SRC)/util.c $(INCL)/util.h
+	$(CC) $(SRC)/util.c -I$(INCL) -c -o $(OBJ)/util.o
+
+$(OBJ):
+	mkdir $(OBJ)
 
 clean:
 	rm -f main $(OBJECTS)
